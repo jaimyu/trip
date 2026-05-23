@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useSpotsStore } from "@/stores/spots";
 import AnchorNav from "@/components/AnchorNav.vue";
 import ImageGallery from "@/components/ImageGallery.vue";
 import CommentSection from "@/components/CommentSection.vue";
+import type { SpotType } from "@/types/spot";
 
 const route = useRoute();
 const router = useRouter();
@@ -25,9 +26,19 @@ const anchorSections = [
   { id: "comments", label: "评论" },
 ];
 
-if (!spot.value) {
-  router.replace("/");
-}
+const typeLabels: Record<SpotType, string> = {
+  nature: "自然风光",
+  history: "人文历史",
+  mixed: "人文+自然",
+};
+
+watch(
+  spot,
+  (val) => {
+    if (!val) router.replace("/");
+  },
+  { immediate: true }
+);
 </script>
 
 <template>
