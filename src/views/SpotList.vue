@@ -23,12 +23,13 @@ const typeOptions: { value: SpotType | "all"; label: string }[] = [
     <div class="layout">
       <aside class="sidebar">
         <h3>按类型筛选</h3>
-        <div class="type-filters">
+        <div class="type-filters" role="group" aria-label="按类型筛选">
           <button
             v-for="option in typeOptions"
             :key="option.value"
             class="type-btn"
             :class="{ active: store.selectedType === option.value }"
+            :aria-pressed="store.selectedType === option.value"
             @click="store.setType(option.value)"
           >
             {{ option.label }}
@@ -111,6 +112,11 @@ const typeOptions: { value: SpotType | "all"; label: string }[] = [
   &:hover {
     border-color: $color-primary;
     color: $color-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
   }
 
   &.active {
