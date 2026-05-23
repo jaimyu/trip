@@ -19,7 +19,7 @@ const router = createRouter({
       component: () => import("@/views/SpotDetail.vue"),
     },
   ],
-  scrollBehavior(to, from, savedPosition) {
+  scrollBehavior(to, _from, savedPosition) {
     if (savedPosition) {
       return savedPosition;
     }
