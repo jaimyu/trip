@@ -1,3 +1,5 @@
+// SCSS 设计令牌，用于组件 <style scoped lang="scss"> 中的复杂样式（阴影、calc 等）
+// 与 tailwind.config.js 中 Tailwind 工具类互补，模板中使用 Tailwind 类名，样式块中使用 SCSS 变量
 $color-primary: #4a90d9;
 $color-accent: #66bb6a;
 $color-teal: #26a69a;
