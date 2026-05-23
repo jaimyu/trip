@@ -149,6 +149,7 @@ watch(
           v-if="prevSpot"
           :to="`/spots/${prevSpot.id}`"
           class="nav-spot prev"
+          :aria-label="`上一个景点：${prevSpot.name}`"
         >
           <span class="arrow">←</span>
           <span class="name">{{ prevSpot.name }}</span>
@@ -159,6 +160,7 @@ watch(
           v-if="nextSpot"
           :to="`/spots/${nextSpot.id}`"
           class="nav-spot next"
+          :aria-label="`下一个景点：${nextSpot.name}`"
         >
           <span class="name">{{ nextSpot.name }}</span>
           <span class="arrow">→</span>
@@ -404,6 +406,11 @@ watch(
   box-shadow: $shadow-card;
   transition: all 0.2s;
   cursor: pointer;
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
+  }
 
   &:hover {
     box-shadow: $shadow-card-hover;
