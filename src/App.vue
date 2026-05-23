@@ -1,8 +1,28 @@
+<script setup lang="ts">
+import Navbar from "@/components/Navbar.vue";
+import Footer from "@/components/Footer.vue";
+</script>
+
 <template>
-  <div id="app">
-    <h1>旅行攻略</h1>
+  <div class="app">
+    <Navbar />
+    <main class="main-content">
+      <router-view />
+    </main>
+    <Footer />
   </div>
 </template>
 
-<script setup lang="ts">
-</script>
+<style scoped>
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafb;
+}
+
+.main-content {
+  flex: 1;
+  padding-top: 60px;
+}
+</style>
