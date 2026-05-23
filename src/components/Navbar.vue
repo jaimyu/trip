@@ -3,12 +3,19 @@ import { ref, onMounted, onUnmounted } from "vue";
 
 const scrolled = ref(false);
 const mobileMenuOpen = ref(false);
+let ticking = false;
 
 function handleScroll() {
-  scrolled.value = window.scrollY > 10;
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      scrolled.value = window.scrollY > 10;
+      ticking = false;
+    });
+    ticking = true;
+  }
 }
 
-onMounted(() => window.addEventListener("scroll", handleScroll));
+onMounted(() => window.addEventListener("scroll", handleScroll, { passive: true }));
 onUnmounted(() => window.removeEventListener("scroll", handleScroll));
 </script>
 
@@ -20,12 +27,12 @@ onUnmounted(() => window.removeEventListener("scroll", handleScroll));
         <span class="logo-text">旅行攻略</span>
       </RouterLink>
 
-      <div class="nav-links" :class="{ open: mobileMenuOpen }">
+      <div class="nav-links" :class="{ open: mobileMenuOpen }" :aria-expanded="mobileMenuOpen" role="navigation">
         <RouterLink to="/" class="nav-link" @click="mobileMenuOpen = false">首页</RouterLink>
         <RouterLink to="/spots" class="nav-link" @click="mobileMenuOpen = false">攻略列表</RouterLink>
       </div>
 
-      <button class="menu-toggle" @click="mobileMenuOpen = !mobileMenuOpen">
+      <button class="menu-toggle" @click="mobileMenuOpen = !mobileMenuOpen" aria-label="切换导航菜单">
         <span></span>
         <span></span>
         <span></span>
