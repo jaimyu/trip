@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { computed } from "vue";
 import { useSpotsStore } from "@/stores/spots";
 import HeroBanner from "@/components/HeroBanner.vue";
 import SpotCard from "@/components/SpotCard.vue";
 import type { SpotType } from "@/types/spot";
 
 const store = useSpotsStore();
-const activeType = ref<SpotType | "all">("all");
+const activeType = computed(() => store.selectedType);
 
 const typeOptions: { value: SpotType | "all"; label: string }[] = [
   { value: "all", label: "全部" },
@@ -16,7 +16,6 @@ const typeOptions: { value: SpotType | "all"; label: string }[] = [
 ];
 
 function filterByType(type: SpotType | "all") {
-  activeType.value = type;
   store.setType(type);
 }
 </script>
@@ -34,6 +33,7 @@ function filterByType(type: SpotType | "all") {
             :key="option.value"
             class="filter-tab"
             :class="{ active: activeType === option.value }"
+            :aria-pressed="activeType === option.value"
             @click="filterByType(option.value)"
           >
             {{ option.label }}
@@ -84,6 +84,11 @@ function filterByType(type: SpotType | "all") {
   &:hover {
     border-color: $color-primary;
     color: $color-primary;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $color-primary;
+    outline-offset: 2px;
   }
 
   &.active {
