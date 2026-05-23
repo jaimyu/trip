@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch, nextTick } from "vue";
 
 const props = defineProps<{
   images: string[];
@@ -24,6 +24,23 @@ function navigate(direction: "prev" | "next") {
     currentIndex.value = (currentIndex.value + 1) % props.images.length;
   }
 }
+
+function handleKeydown(e: KeyboardEvent) {
+  if (!showModal.value) return;
+  if (e.key === "Escape") closeImage();
+  if (e.key === "ArrowLeft") navigate("prev");
+  if (e.key === "ArrowRight") navigate("next");
+}
+
+watch(showModal, (val) => {
+  if (val) {
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeydown);
+  } else {
+    document.body.style.overflow = "";
+    window.removeEventListener("keydown", handleKeydown);
+  }
+});
 </script>
 
 <template>
@@ -39,11 +56,11 @@ function navigate(direction: "prev" | "next") {
 
     <Teleport to="body">
       <Transition name="modal">
-        <div v-if="showModal" class="modal-overlay" @click="closeImage">
-          <button class="modal-close" @click="closeImage">&times;</button>
-          <button class="modal-nav modal-prev" @click.stop="navigate('prev')">&#10094;</button>
-          <img :src="images[currentIndex]" class="modal-image" />
-          <button class="modal-nav modal-next" @click.stop="navigate('next')">&#10095;</button>
+        <div v-if="showModal" class="modal-overlay" @click="closeImage" role="dialog" aria-modal="true">
+          <button class="modal-close" @click="closeImage" aria-label="关闭">&times;</button>
+          <button class="modal-nav modal-prev" @click.stop="navigate('prev')" aria-label="上一张">&#10094;</button>
+          <img :src="images[currentIndex]" :alt="`图片 ${currentIndex + 1}`" class="modal-image" />
+          <button class="modal-nav modal-next" @click.stop="navigate('next')" aria-label="下一张">&#10095;</button>
         </div>
       </Transition>
     </Teleport>

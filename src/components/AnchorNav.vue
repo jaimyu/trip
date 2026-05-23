@@ -6,17 +6,24 @@ defineProps<{
 }>();
 
 const activeId = ref("");
+let ticking = false;
 
 function handleScroll() {
-  const sections = document.querySelectorAll("section[id]");
-  let current = "";
-  sections.forEach((section) => {
-    const top = (section as HTMLElement).offsetTop - 120;
-    if (window.scrollY >= top) {
-      current = (section as HTMLElement).id;
-    }
-  });
-  activeId.value = current;
+  if (!ticking) {
+    requestAnimationFrame(() => {
+      const sectionEls = document.querySelectorAll("section[id]");
+      let current = "";
+      sectionEls.forEach((section) => {
+        const top = (section as HTMLElement).offsetTop - 120;
+        if (window.scrollY >= top) {
+          current = (section as HTMLElement).id;
+        }
+      });
+      activeId.value = current;
+      ticking = false;
+    });
+    ticking = true;
+  }
 }
 
 function scrollTo(id: string) {
@@ -26,12 +33,15 @@ function scrollTo(id: string) {
   }
 }
 
-onMounted(() => window.addEventListener("scroll", handleScroll));
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
+});
 onUnmounted(() => window.removeEventListener("scroll", handleScroll));
 </script>
 
 <template>
-  <nav class="anchor-nav">
+  <nav class="anchor-nav" aria-label="页面导航">
     <div class="anchor-inner">
       <button
         v-for="section in sections"

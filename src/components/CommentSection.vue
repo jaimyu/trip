@@ -29,7 +29,7 @@ const mockComments = [
     <h2 class="section-title">用户评论</h2>
 
     <div class="coming-soon-banner">
-      <span>💬 评论功能即将上线，敬请期待！</span>
+      <span>💬 真实评论功能即将上线！以下为示例预览</span>
     </div>
 
     <div class="comments-list">
@@ -37,7 +37,7 @@ const mockComments = [
         <div class="comment-header">
           <span class="nickname">{{ comment.nickname }}</span>
           <div class="comment-meta">
-            <div class="rating">
+            <div class="rating" :aria-label="`评分：${comment.rating} / 5`">
               <span v-for="i in 5" :key="i" class="star" :class="{ active: i <= comment.rating }">★</span>
             </div>
             <span class="date">{{ comment.date }}</span>
