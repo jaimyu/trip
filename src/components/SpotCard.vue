@@ -4,6 +4,12 @@ import type { Spot } from "@/types/spot";
 defineProps<{
   spot: Spot;
 }>();
+
+const typeLabels: Record<Spot["type"], string> = {
+  nature: "自然风光",
+  history: "人文历史",
+  mixed: "人文+自然",
+};
 </script>
 
 <template>
@@ -11,7 +17,7 @@ defineProps<{
     <div class="card-image-wrapper">
       <img :src="spot.cover" :alt="spot.name" class="card-image" loading="lazy" />
       <span class="type-badge" :class="spot.type">
-        {{ spot.type === "nature" ? "自然风光" : spot.type === "history" ? "人文历史" : "人文+自然" }}
+        {{ typeLabels[spot.type] }}
       </span>
     </div>
     <div class="card-body">
@@ -23,7 +29,7 @@ defineProps<{
         <span v-for="i in 5" :key="i" class="star" :class="{ active: i <= spot.rating }">★</span>
       </div>
       <p class="card-summary">{{ spot.summary }}</p>
-      <button class="view-btn">查看攻略</button>
+      <span class="view-btn">查看攻略</span>
     </div>
   </RouterLink>
 </template>

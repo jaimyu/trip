@@ -21,6 +21,7 @@ const slides = [
 
 const current = ref(0);
 let timer: ReturnType<typeof setInterval> | null = null;
+let reducedMotion = false;
 
 function next() {
   current.value = (current.value + 1) % slides.length;
@@ -31,7 +32,9 @@ function prev() {
 }
 
 function startAutoPlay() {
-  timer = setInterval(next, 5000);
+  if (!reducedMotion) {
+    timer = setInterval(next, 5000);
+  }
 }
 
 function stopAutoPlay() {
@@ -41,12 +44,15 @@ function stopAutoPlay() {
   }
 }
 
-onMounted(startAutoPlay);
+onMounted(() => {
+  reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  startAutoPlay();
+});
 onUnmounted(stopAutoPlay);
 </script>
 
 <template>
-  <div class="hero-banner" @mouseenter="stopAutoPlay" @mouseleave="startAutoPlay">
+  <div class="hero-banner" role="region" aria-label="焦点横幅" @mouseenter="stopAutoPlay" @mouseleave="startAutoPlay">
     <TransitionGroup class="slides-container" tag="div">
       <div
         v-for="(slide, index) in slides"
@@ -65,17 +71,19 @@ onUnmounted(stopAutoPlay);
       </div>
     </TransitionGroup>
 
-    <button class="arrow arrow-left" @click="prev">&#10094;</button>
-    <button class="arrow arrow-right" @click="next">&#10095;</button>
+    <button class="arrow arrow-left" @click="prev" aria-label="上一张幻灯片">&#10094;</button>
+    <button class="arrow arrow-right" @click="next" aria-label="下一张幻灯片">&#10095;</button>
 
-    <div class="dots">
-      <span
+    <div class="dots" role="tablist" aria-label="幻灯片选择器">
+      <button
         v-for="(_, index) in slides"
         :key="index"
         class="dot"
         :class="{ active: index === current }"
         @click="current = index"
-      ></span>
+        role="tab"
+        :aria-label="`第 ${index + 1} 张幻灯片`"
+      ></button>
     </div>
   </div>
 </template>
