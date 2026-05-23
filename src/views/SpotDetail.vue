@@ -32,6 +32,12 @@ const typeLabels: Record<SpotType, string> = {
   mixed: "人文+自然",
 };
 
+const levelLabels: Record<string, string> = {
+  high: "高档",
+  mid: "中档",
+  low: "经济",
+};
+
 watch(
   spot,
   (val) => {
@@ -49,7 +55,7 @@ watch(
         <div class="info-badges">
           <span class="badge province">{{ spot.province }}</span>
           <span class="badge" :class="spot.type">
-            {{ spot.type === "nature" ? "自然风光" : spot.type === "history" ? "人文历史" : "人文+自然" }}
+            {{ typeLabels[spot.type] }}
           </span>
           <span class="badge rating">
             <span v-for="i in 5" :key="i" class="star" :class="{ active: i <= spot.rating }">★</span>
@@ -107,7 +113,7 @@ watch(
         <div class="hotel-grid">
           <div v-for="(hotel, index) in spot.hotels" :key="index" class="hotel-card" :class="hotel.level">
             <div class="hotel-level">
-              {{ hotel.level === "high" ? "高档" : hotel.level === "mid" ? "中档" : "经济" }}
+              {{ levelLabels[hotel.level] }}
             </div>
             <h4>{{ hotel.name }}</h4>
             <p class="hotel-price">{{ hotel.price }}</p>
